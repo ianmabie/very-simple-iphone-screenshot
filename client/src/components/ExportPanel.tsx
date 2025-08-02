@@ -10,7 +10,7 @@ interface ExportPanelProps {
 }
 
 export function ExportPanel({ hasContent, onExport }: ExportPanelProps) {
-  const [quality, setQuality] = useState(1);
+  const [quality, setQuality] = useState(3); // Default to high quality
   const [isExporting, setIsExporting] = useState(false);
   const { toast } = useToast();
 
@@ -39,15 +39,18 @@ export function ExportPanel({ hasContent, onExport }: ExportPanelProps) {
     return 'High';
   };
 
+  const getFileSize = () => {
+    if (!hasContent) return '~0 MB';
+    const baseSize = 1.8; // Estimated base size in MB
+    const qualityMultiplier = quality;
+    return `~${(baseSize * qualityMultiplier).toFixed(1)} MB`;
+  };
+
   return (
     <div className="mt-8">
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-6">
-            <div>
-              <h2 className="text-lg font-semibold text-gray-900">Export PNG</h2>
-              <p className="text-sm text-gray-500 mt-1">Download your formatted mockup</p>
-            </div>
             <div className="flex items-center space-x-4">
               <label className="text-sm font-medium text-gray-700">Quality:</label>
               <div className="flex items-center space-x-3">
@@ -64,6 +67,7 @@ export function ExportPanel({ hasContent, onExport }: ExportPanelProps) {
                 <span className="text-xs text-gray-500 w-8">High</span>
               </div>
               <span className="text-sm text-gray-600 w-16">{getQualityLabel()}</span>
+              <span className="text-sm text-gray-500">{getFileSize()}</span>
             </div>
           </div>
           

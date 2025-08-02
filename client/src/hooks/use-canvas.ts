@@ -105,7 +105,7 @@ export function useCanvas() {
         deviceFrame.notch.y,
         deviceFrame.notch.width,
         deviceFrame.notch.height,
-        8
+        12
       );
       ctx.fill();
     }
