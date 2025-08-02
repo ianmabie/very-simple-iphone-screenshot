@@ -195,38 +195,14 @@ export function useCanvas() {
         );
         exportCtx.clip();
         
-        // 3. Draw the original high-resolution image (this is the key fix!)
-        const imageAspectRatio = image.width / image.height;
-        const screenAspectRatio = screenArea.width / screenArea.height;
-        
-        let drawWidth, drawHeight, drawX, drawY;
-        
-        if (imageAspectRatio > screenAspectRatio) {
-          // Image is wider - fit to height
-          drawHeight = screenArea.height * exportScale;
-          drawWidth = drawHeight * imageAspectRatio;
-          drawX = screenArea.x * exportScale + (screenArea.width * exportScale - drawWidth) / 2;
-          drawY = screenArea.y * exportScale;
-        } else {
-          // Image is taller - fit to width
-          drawWidth = screenArea.width * exportScale;
-          drawHeight = drawWidth / imageAspectRatio;
-          drawX = screenArea.x * exportScale;
-          drawY = screenArea.y * exportScale + (screenArea.height * exportScale - drawHeight) / 2;
-        }
-        
-        // Apply position and scale from user interactions
-        const finalX = drawX + (position.x * exportScale);
-        const finalY = drawY + (position.y * exportScale);
-        const finalWidth = drawWidth * scale;
-        const finalHeight = drawHeight * scale;
-        
+        // 3. Draw the original high-resolution image to match preview exactly
+        // The preview fills the entire screen area, so we do the same in export
         exportCtx.drawImage(
           image,
-          finalX,
-          finalY,
-          finalWidth,
-          finalHeight
+          screenArea.x * exportScale,
+          screenArea.y * exportScale,
+          screenArea.width * exportScale,
+          screenArea.height * exportScale
         );
         
         exportCtx.restore();

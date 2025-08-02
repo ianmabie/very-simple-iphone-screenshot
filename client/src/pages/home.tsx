@@ -95,7 +95,7 @@ export default function Home() {
     }
     
     try {
-      await exportCanvas('mockup-iphone-screenshot.png', imageDimensions, canvasState);
+      await exportCanvas('mockup-iphone-screenshot.png', imageDimensions || undefined, canvasState);
       toast({
         title: 'Download started',
         description: 'Your mockup is being downloaded.',
