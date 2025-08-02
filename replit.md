@@ -2,7 +2,7 @@
 
 ## Overview
 
-This is a full-stack web application for creating device mockups from screenshots. Users can upload screenshots and place them within realistic device frames (like iPhone models) to create professional-looking mockups for app stores, presentations, or marketing materials. The application features a React frontend with TypeScript, an Express.js backend, and uses PostgreSQL with Drizzle ORM for data persistence.
+This is a client-side web application for creating device mockups from screenshots. Users can upload screenshots and place them within realistic device frames (like iPhone models) to create professional-looking mockups for app stores, presentations, or marketing materials. The application features a React frontend with TypeScript and a minimal Express.js backend for serving static files. All image processing happens client-side with no database or persistent storage requirements.
 
 ## User Preferences
 
@@ -21,11 +21,11 @@ Interface preference: Clean, simplified UI with minimal controls and automatic f
 - **File Handling**: Custom drag-and-drop file upload with validation for image types (PNG, JPG, HEIC)
 
 ### Backend Architecture
-- **Framework**: Express.js with TypeScript
-- **Database**: PostgreSQL with Drizzle ORM for type-safe database operations
-- **Authentication**: Basic user schema with username/password (implementation not yet complete)
-- **Storage Interface**: Abstracted storage layer with in-memory implementation for development
-- **API Structure**: RESTful API with /api prefix for all endpoints
+- **Framework**: Minimal Express.js server with TypeScript
+- **Database**: None - no persistent storage required
+- **Authentication**: None - no user accounts needed
+- **Storage**: No storage layer - all processing client-side
+- **API Structure**: Simple health check endpoint at /api/health
 - **Development Setup**: Hot reloading with Vite integration in development mode
 
 ### Core Features
@@ -38,19 +38,17 @@ Interface preference: Clean, simplified UI with minimal controls and automatic f
 
 ### Build and Deployment
 - **Development**: Vite dev server with Express backend proxy
-- **Production Build**: Vite builds frontend to dist/public, esbuild bundles backend to dist/
+- **Production Build**: Vite builds frontend to dist/public, esbuild bundles minimal backend to dist/
 - **Type Safety**: Shared TypeScript types between frontend and backend
-- **Database Migrations**: Drizzle Kit for schema management and migrations
+- **No Database Setup**: Zero database configuration required for deployment
+- **Simplified Deployment**: Can be deployed anywhere Node.js is supported with just `npm install` and `npm start`
 
 ## External Dependencies
 
-### Database
-- **PostgreSQL**: Primary database using Neon serverless PostgreSQL
-- **Drizzle ORM**: Type-safe database operations with schema-first approach
-
-### Cloud Services
-- **Google Cloud Storage**: File storage capabilities (configured but not yet implemented)
-- **File Upload**: Uppy.js integration for advanced file upload features
+### Core Dependencies
+- **No Database**: Eliminated PostgreSQL and Drizzle ORM dependencies
+- **No Cloud Storage**: Removed Google Cloud Storage and Uppy.js dependencies
+- **Simplified Architecture**: Client-side only processing with minimal server footprint
 
 ### UI and Styling
 - **Radix UI**: Accessible component primitives for complex UI components
