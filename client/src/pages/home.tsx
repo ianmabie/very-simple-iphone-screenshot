@@ -161,7 +161,7 @@ export default function Home() {
 
         {/* Desktop Layout - Two Columns */}
         <div className="hidden lg:block">
-          <div className="grid grid-cols-5 gap-8 h-[calc(100vh-12rem)]">
+          <div className="grid grid-cols-5 gap-8 h-[calc(100vh-16rem)]">
             {/* Left Column - Preview Canvas (3/5 width) */}
             <div className="col-span-3 flex flex-col">
               <PreviewCanvas

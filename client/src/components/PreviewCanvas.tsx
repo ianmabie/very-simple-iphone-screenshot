@@ -103,7 +103,7 @@ export function PreviewCanvas({ canvasState, onStateChange, onFileSelect, isProc
         <h2 className="text-lg font-semibold text-gray-900">Preview</h2>
       </div>
 
-      <div className="p-8 flex-1 flex items-center justify-center">
+      <div className="p-6 flex-1 flex items-center justify-center">
         <div 
           className={`flex items-center justify-center w-full h-full bg-gray-50 rounded-lg border-2 border-dashed transition-all cursor-pointer ${
             isDragOver
@@ -112,7 +112,7 @@ export function PreviewCanvas({ canvasState, onStateChange, onFileSelect, isProc
                 ? 'border-gray-300 hover:border-blue-500 hover:bg-blue-50' 
                 : 'border-gray-300'
           } ${isProcessing ? 'opacity-50 pointer-events-none' : ''}`}
-          style={{ minHeight: hasContent ? 'auto' : '300px' }}
+          style={{ minHeight: hasContent ? 'auto' : '250px', maxHeight: '400px' }}
           onDrop={handleDrop}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
