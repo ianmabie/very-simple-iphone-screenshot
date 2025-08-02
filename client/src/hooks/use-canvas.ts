@@ -127,31 +127,32 @@ export function useCanvas() {
     ctx.restore();
   }, []);
 
-  const exportCanvas = useCallback(async (filename: string = 'mockup-iphone-screenshot.png', originalImageDimensions?: { width: number; height: number }) => {
-    const canvas = canvasRef.current;
-    if (!canvas) {
-      console.error('Canvas ref is null:', canvasRef.current);
-      throw new Error('Canvas not available');
+  const exportCanvas = useCallback(async (filename: string = 'mockup-iphone-screenshot.png', originalImageDimensions?: { width: number; height: number }, canvasState?: CanvasState) => {
+    if (!canvasState?.image || !canvasState?.deviceFrame) {
+      throw new Error('No image or device frame available for export');
     }
+
+    const { image, deviceFrame, position, scale } = canvasState;
 
     return new Promise<void>((resolve, reject) => {
       try {
-        // Calculate export dimensions - use original image dimensions if available, otherwise use high scale
-        let exportWidth, exportHeight;
+        // Calculate high-resolution export dimensions
+        let exportScale = 4; // Default high scale
         if (originalImageDimensions) {
-          // Scale to match original image resolution
-          const scaleToOriginal = Math.max(
-            originalImageDimensions.width / canvas.width,
-            originalImageDimensions.height / canvas.height
+          // Use original image resolution to determine optimal export scale
+          const frameWidth = deviceFrame.dimensions.width;
+          const frameHeight = deviceFrame.dimensions.height;
+          
+          // Calculate scale to match or exceed original image resolution
+          exportScale = Math.max(
+            originalImageDimensions.width / frameWidth,
+            originalImageDimensions.height / frameHeight,
+            4 // Minimum 4x scale
           );
-          exportWidth = canvas.width * scaleToOriginal;
-          exportHeight = canvas.height * scaleToOriginal;
-        } else {
-          // Fallback to 4x scale
-          const scale = 4;
-          exportWidth = canvas.width * scale;
-          exportHeight = canvas.height * scale;
         }
+        
+        const exportWidth = deviceFrame.dimensions.width * exportScale;
+        const exportHeight = deviceFrame.dimensions.height * exportScale;
         
         const exportCanvas = document.createElement('canvas');
         exportCanvas.width = exportWidth;
@@ -166,10 +167,97 @@ export function useCanvas() {
         // Configure context for maximum quality
         exportCtx.imageSmoothingEnabled = true;
         exportCtx.imageSmoothingQuality = 'high';
-        exportCtx.scale(exportWidth / canvas.width, exportHeight / canvas.height);
         
-        // Copy the original canvas content to the high-res canvas
-        exportCtx.drawImage(canvas, 0, 0);
+        // REDRAW EVERYTHING AT HIGH RESOLUTION instead of scaling up low-res canvas
+        
+        // 1. Draw device frame background at high resolution
+        exportCtx.fillStyle = deviceFrame.frameColor;
+        drawRoundedRect(
+          exportCtx,
+          0,
+          0,
+          exportWidth,
+          exportHeight,
+          deviceFrame.cornerRadius * exportScale
+        );
+        exportCtx.fill();
+        
+        // 2. Create screen area clipping path at high resolution
+        const screenArea = deviceFrame.screenArea;
+        exportCtx.save();
+        drawRoundedRect(
+          exportCtx,
+          screenArea.x * exportScale,
+          screenArea.y * exportScale,
+          screenArea.width * exportScale,
+          screenArea.height * exportScale,
+          deviceFrame.cornerRadius * exportScale
+        );
+        exportCtx.clip();
+        
+        // 3. Draw the original high-resolution image (this is the key fix!)
+        const imageAspectRatio = image.width / image.height;
+        const screenAspectRatio = screenArea.width / screenArea.height;
+        
+        let drawWidth, drawHeight, drawX, drawY;
+        
+        if (imageAspectRatio > screenAspectRatio) {
+          // Image is wider - fit to height
+          drawHeight = screenArea.height * exportScale;
+          drawWidth = drawHeight * imageAspectRatio;
+          drawX = screenArea.x * exportScale + (screenArea.width * exportScale - drawWidth) / 2;
+          drawY = screenArea.y * exportScale;
+        } else {
+          // Image is taller - fit to width
+          drawWidth = screenArea.width * exportScale;
+          drawHeight = drawWidth / imageAspectRatio;
+          drawX = screenArea.x * exportScale;
+          drawY = screenArea.y * exportScale + (screenArea.height * exportScale - drawHeight) / 2;
+        }
+        
+        // Apply position and scale from user interactions
+        const finalX = drawX + (position.x * exportScale);
+        const finalY = drawY + (position.y * exportScale);
+        const finalWidth = drawWidth * scale;
+        const finalHeight = drawHeight * scale;
+        
+        exportCtx.drawImage(
+          image,
+          finalX,
+          finalY,
+          finalWidth,
+          finalHeight
+        );
+        
+        exportCtx.restore();
+        
+        // 4. Draw notch at high resolution if device has one
+        if (deviceFrame.hasNotch && deviceFrame.notch) {
+          exportCtx.fillStyle = '#000000';
+          drawRoundedRect(
+            exportCtx,
+            deviceFrame.notch.x * exportScale,
+            deviceFrame.notch.y * exportScale,
+            deviceFrame.notch.width * exportScale,
+            deviceFrame.notch.height * exportScale,
+            12 * exportScale
+          );
+          exportCtx.fill();
+        }
+        
+        // 5. Draw Dynamic Island at high resolution if device has one
+        if (deviceFrame.hasDynamicIsland && deviceFrame.dynamicIsland) {
+          exportCtx.fillStyle = '#000000';
+          drawRoundedRect(
+            exportCtx,
+            deviceFrame.dynamicIsland.x * exportScale,
+            deviceFrame.dynamicIsland.y * exportScale,
+            deviceFrame.dynamicIsland.width * exportScale,
+            deviceFrame.dynamicIsland.height * exportScale,
+            9 * exportScale
+          );
+          exportCtx.fill();
+        }
         
         // Export with maximum quality
         exportCanvas.toBlob((blob) => {
