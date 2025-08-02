@@ -31,6 +31,7 @@ A simple, client-side web application for creating professional iPhone mockups f
 
 ### Prerequisites
 - Node.js 18 or higher
+- Works on Windows, macOS, and Linux
 
 ### Installation
 
@@ -54,6 +55,12 @@ A simple, client-side web application for creating professional iPhone mockups f
    ```
    http://localhost:5000
    ```
+
+### Troubleshooting
+
+If you encounter port issues on macOS or Windows, try:
+- Using a different port: `PORT=3000 npm run dev`
+- Ensuring no other applications are using port 5000
 
 ## Usage
 

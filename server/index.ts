@@ -61,11 +61,19 @@ app.use((req, res, next) => {
   // this serves both the API and the client.
   // It is the only port that is not firewalled.
   const port = parseInt(process.env.PORT || '5000', 10);
-  server.listen({
+  
+  // Configure server options based on environment
+  const serverOptions: any = {
     port,
     host: "0.0.0.0",
-    reusePort: true,
-  }, () => {
+  };
+  
+  // Only use reusePort on Replit (where it's supported)
+  if (process.env.REPLIT_ENVIRONMENT) {
+    serverOptions.reusePort = true;
+  }
+  
+  server.listen(serverOptions, () => {
     log(`serving on port ${port}`);
   });
 })();
