@@ -134,27 +134,61 @@ export default function Home() {
       </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="max-w-4xl mx-auto">
-          <PreviewCanvas
-            canvasState={canvasState}
-            onStateChange={handleStateChange}
-            onFileSelect={handleFileSelect}
-            isProcessing={isProcessing}
-            canvasHook={canvasHook}
-          />
-          
-          <div className="mt-8 space-y-6">
-            <ImageInfo 
-              dimensions={imageDimensions}
-              recommendedDevice="iPhone 15 Pro (Dynamic Island)"
+        {/* Mobile Layout - Vertical Stack */}
+        <div className="lg:hidden">
+          <div className="max-w-4xl mx-auto">
+            <PreviewCanvas
+              canvasState={canvasState}
+              onStateChange={handleStateChange}
+              onFileSelect={handleFileSelect}
+              isProcessing={isProcessing}
+              canvasHook={canvasHook}
             />
+            
+            <div className="mt-8 space-y-6">
+              <ImageInfo 
+                dimensions={imageDimensions}
+                recommendedDevice="iPhone 15 Pro (Dynamic Island)"
+              />
+            </div>
           </div>
+
+          <ExportPanel
+            hasContent={!!hasContent}
+            onExport={handleExport}
+          />
         </div>
 
-        <ExportPanel
-          hasContent={!!hasContent}
-          onExport={handleExport}
-        />
+        {/* Desktop Layout - Two Columns */}
+        <div className="hidden lg:block">
+          <div className="grid grid-cols-2 gap-8 h-[calc(100vh-12rem)]">
+            {/* Left Column - Preview Canvas */}
+            <div className="flex flex-col">
+              <PreviewCanvas
+                canvasState={canvasState}
+                onStateChange={handleStateChange}
+                onFileSelect={handleFileSelect}
+                isProcessing={isProcessing}
+                canvasHook={canvasHook}
+              />
+            </div>
+
+            {/* Right Column - Controls */}
+            <div className="flex flex-col space-y-6">
+              <ImageInfo 
+                dimensions={imageDimensions}
+                recommendedDevice="iPhone 15 Pro (Dynamic Island)"
+              />
+              
+              <div className="flex-1 flex flex-col justify-end">
+                <ExportPanel
+                  hasContent={!!hasContent}
+                  onExport={handleExport}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
       </main>
 
       <LoadingOverlay

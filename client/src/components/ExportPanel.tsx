@@ -26,14 +26,15 @@ export function ExportPanel({ hasContent, onExport }: ExportPanelProps) {
   };
 
   return (
-    <div className="mt-8">
+    <div className="lg:mt-0 mt-8">
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-        <div className="flex items-center justify-center space-x-4">
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">Export Options</h3>
+        <div className="flex flex-col lg:flex-row items-center justify-center space-y-3 lg:space-y-0 lg:space-x-4">
           <Button
             onClick={() => handleExport(false)}
             disabled={!hasContent || isExporting !== null}
             variant="outline"
-            className="border-gray-300 hover:bg-gray-50"
+            className="border-gray-300 hover:bg-gray-50 w-full lg:w-auto"
           >
             <Download className="w-4 h-4 mr-2" />
             {isExporting === 'low' ? 'Downloading...' : `Low Quality ${getFileSize(false)}`}
@@ -42,7 +43,7 @@ export function ExportPanel({ hasContent, onExport }: ExportPanelProps) {
           <Button
             onClick={() => handleExport(true)}
             disabled={!hasContent || isExporting !== null}
-            className="bg-emerald-500 hover:bg-emerald-600 text-white"
+            className="bg-emerald-500 hover:bg-emerald-600 text-white w-full lg:w-auto"
           >
             <Download className="w-4 h-4 mr-2" />
             {isExporting === 'high' ? 'Downloading...' : `High Quality ${getFileSize(true)}`}

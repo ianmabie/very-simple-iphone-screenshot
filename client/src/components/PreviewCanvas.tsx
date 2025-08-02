@@ -98,20 +98,21 @@ export function PreviewCanvas({ canvasState, onStateChange, onFileSelect, isProc
 
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-200">
+    <div className="bg-white rounded-xl shadow-sm border border-gray-200 h-full flex flex-col">
       <div className="border-b border-gray-200 p-4">
         <h2 className="text-lg font-semibold text-gray-900">Preview</h2>
       </div>
 
-      <div className="p-8">
+      <div className="p-8 flex-1 flex items-center justify-center">
         <div 
-          className={`flex items-center justify-center min-h-96 bg-gray-50 rounded-lg border-2 border-dashed transition-all cursor-pointer ${
+          className={`flex items-center justify-center w-full h-full bg-gray-50 rounded-lg border-2 border-dashed transition-all cursor-pointer ${
             isDragOver
               ? 'border-blue-500 bg-blue-50'
               : !hasContent 
                 ? 'border-gray-300 hover:border-blue-500 hover:bg-blue-50' 
                 : 'border-gray-300'
           } ${isProcessing ? 'opacity-50 pointer-events-none' : ''}`}
+          style={{ minHeight: hasContent ? 'auto' : '400px' }}
           onDrop={handleDrop}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
@@ -136,17 +137,17 @@ export function PreviewCanvas({ canvasState, onStateChange, onFileSelect, isProc
               </Button>
             </div>
           ) : (
-            <div className="relative">
+            <div className="relative w-full h-full flex items-center justify-center">
               <canvas
                 ref={canvasRef}
-                className="max-w-full max-h-96 object-contain"
+                className="max-w-full max-h-full object-contain"
                 style={{ imageRendering: 'crisp-edges' }}
               />
               <Button
                 onClick={() => handleRemoveImage(onStateChange)}
                 variant="outline"
                 size="sm"
-                className="absolute -top-12 right-0 bg-white/90 hover:bg-white border border-gray-200 shadow-sm"
+                className="absolute top-4 right-4 bg-white/90 hover:bg-white border border-gray-200 shadow-sm"
               >
                 <X className="w-4 h-4 mr-2" />
                 Remove Image
