@@ -127,7 +127,7 @@ export function useCanvas() {
     ctx.restore();
   }, []);
 
-  const exportCanvas = useCallback(async (filename: string = 'mockup-iphone-screenshot.png', originalImageDimensions?: { width: number; height: number }, canvasState?: CanvasState) => {
+  const exportCanvas = useCallback(async (filename: string = 'mockup-iphone-screenshot.png', originalImageDimensions?: { width: number; height: number }, canvasState?: CanvasState, isHighQuality: boolean = true) => {
     if (!canvasState?.image || !canvasState?.deviceFrame) {
       throw new Error('No image or device frame available for export');
     }
@@ -136,10 +136,10 @@ export function useCanvas() {
 
     return new Promise<void>((resolve, reject) => {
       try {
-        // Calculate high-resolution export dimensions
-        let exportScale = 4; // Default high scale
-        if (originalImageDimensions) {
-          // Use original image resolution to determine optimal export scale
+        // Calculate export dimensions based on quality setting
+        let exportScale = isHighQuality ? 4 : 2; // High quality: 4x, Low quality: 2x
+        if (isHighQuality && originalImageDimensions) {
+          // Use original image resolution to determine optimal export scale for high quality
           const frameWidth = deviceFrame.dimensions.width;
           const frameHeight = deviceFrame.dimensions.height;
           
@@ -147,7 +147,7 @@ export function useCanvas() {
           exportScale = Math.max(
             originalImageDimensions.width / frameWidth,
             originalImageDimensions.height / frameHeight,
-            4 // Minimum 4x scale
+            4 // Minimum 4x scale for high quality
           );
         }
         

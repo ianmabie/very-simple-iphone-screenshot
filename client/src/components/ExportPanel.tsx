@@ -1,83 +1,51 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Slider } from '@/components/ui/slider';
 import { Download } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
 
 interface ExportPanelProps {
   hasContent: boolean;
-  onExport: () => Promise<void>;
+  onExport: (isHighQuality: boolean) => Promise<void>;
 }
 
 export function ExportPanel({ hasContent, onExport }: ExportPanelProps) {
-  const [quality, setQuality] = useState(3); // Default to high quality
-  const [isExporting, setIsExporting] = useState(false);
-  const { toast } = useToast();
+  const [isExporting, setIsExporting] = useState<'high' | 'low' | null>(null);
 
-  const handleExport = async () => {
-    setIsExporting(true);
+  const handleExport = async (isHighQuality: boolean) => {
+    setIsExporting(isHighQuality ? 'high' : 'low');
     try {
-      await onExport();
-      toast({
-        title: 'Export successful',
-        description: 'Your mockup has been downloaded successfully.',
-      });
-    } catch (error) {
-      toast({
-        title: 'Export failed',
-        description: 'There was an error exporting your mockup. Please try again.',
-        variant: 'destructive'
-      });
+      await onExport(isHighQuality);
     } finally {
-      setIsExporting(false);
+      setIsExporting(null);
     }
   };
 
-  const getQualityLabel = () => {
-    if (quality <= 1) return 'Low';
-    if (quality <= 2) return 'Medium';
-    return 'High';
-  };
-
-  const getFileSize = () => {
+  const getFileSize = (isHighQuality: boolean) => {
     if (!hasContent) return '~0 MB';
-    const baseSize = 1.8; // Estimated base size in MB
-    const qualityMultiplier = quality;
-    return `~${(baseSize * qualityMultiplier).toFixed(1)} MB`;
+    const baseSize = isHighQuality ? 2.8 : 1.2; // Estimated sizes in MB
+    return `~${baseSize.toFixed(1)} MB`;
   };
 
   return (
     <div className="mt-8">
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-6">
-            <div className="flex items-center space-x-4">
-              <label className="text-sm font-medium text-gray-700">Quality:</label>
-              <div className="flex items-center space-x-3">
-                <span className="text-xs text-gray-500 w-8">Low</span>
-                <Slider
-                  value={[quality]}
-                  onValueChange={([value]) => setQuality(value)}
-                  min={1}
-                  max={3}
-                  step={0.5}
-                  disabled={!hasContent}
-                  className="w-24"
-                />
-                <span className="text-xs text-gray-500 w-8">High</span>
-              </div>
-              <span className="text-sm text-gray-600 w-16">{getQualityLabel()}</span>
-              <span className="text-sm text-gray-500">{getFileSize()}</span>
-            </div>
-          </div>
+        <div className="flex items-center justify-center space-x-4">
+          <Button
+            onClick={() => handleExport(false)}
+            disabled={!hasContent || isExporting !== null}
+            variant="outline"
+            className="border-gray-300 hover:bg-gray-50"
+          >
+            <Download className="w-4 h-4 mr-2" />
+            {isExporting === 'low' ? 'Downloading...' : `Low Quality ${getFileSize(false)}`}
+          </Button>
           
           <Button
-            onClick={handleExport}
-            disabled={!hasContent || isExporting}
+            onClick={() => handleExport(true)}
+            disabled={!hasContent || isExporting !== null}
             className="bg-emerald-500 hover:bg-emerald-600 text-white"
           >
             <Download className="w-4 h-4 mr-2" />
-            {isExporting ? 'Downloading...' : 'Download PNG'}
+            {isExporting === 'high' ? 'Downloading...' : `High Quality ${getFileSize(true)}`}
           </Button>
         </div>
       </div>

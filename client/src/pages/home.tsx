@@ -84,7 +84,7 @@ export default function Home() {
 
   const hasContent = canvasState.image && canvasState.deviceFrame;
 
-  const handleExport = useCallback(async () => {
+  const handleExport = useCallback(async (isHighQuality: boolean = true) => {
     if (!hasContent) {
       toast({
         title: 'No content to export',
@@ -95,10 +95,11 @@ export default function Home() {
     }
     
     try {
-      await exportCanvas('mockup-iphone-screenshot.png', imageDimensions || undefined, canvasState);
+      const qualityText = isHighQuality ? 'high-quality' : 'low-quality';
+      await exportCanvas(`mockup-iphone-screenshot-${qualityText}.png`, imageDimensions || undefined, canvasState, isHighQuality);
       toast({
         title: 'Download started',
-        description: 'Your mockup is being downloaded.',
+        description: `Your ${isHighQuality ? 'high quality' : 'low quality'} mockup is being downloaded.`,
       });
     } catch (error) {
       console.error('Export failed:', error);
@@ -108,7 +109,7 @@ export default function Home() {
         variant: 'destructive'
       });
     }
-  }, [hasContent, exportCanvas, toast, imageDimensions]);
+  }, [hasContent, exportCanvas, toast, imageDimensions, canvasState]);
 
   return (
     <div className="font-sans bg-gray-50 min-h-screen">
