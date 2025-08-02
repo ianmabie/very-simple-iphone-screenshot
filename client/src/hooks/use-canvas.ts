@@ -130,6 +130,7 @@ export function useCanvas() {
   const exportCanvas = useCallback(async (filename: string = 'mockup-iphone-screenshot.png') => {
     const canvas = canvasRef.current;
     if (!canvas) {
+      console.error('Canvas ref is null:', canvasRef.current);
       throw new Error('Canvas not available');
     }
 

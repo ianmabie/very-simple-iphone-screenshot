@@ -1,7 +1,7 @@
 import { useEffect, useCallback, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Upload } from 'lucide-react';
-import { useCanvas, CanvasState } from '@/hooks/use-canvas';
+import { CanvasState } from '@/hooks/use-canvas';
 import { useToast } from '@/hooks/use-toast';
 
 interface PreviewCanvasProps {
@@ -9,10 +9,11 @@ interface PreviewCanvasProps {
   onStateChange: (state: Partial<CanvasState>) => void;
   onFileSelect: (file: File) => void;
   isProcessing: boolean;
+  canvasHook: ReturnType<typeof import('@/hooks/use-canvas').useCanvas>;
 }
 
-export function PreviewCanvas({ canvasState, onStateChange, onFileSelect, isProcessing }: PreviewCanvasProps) {
-  const { canvasRef, drawMockup } = useCanvas();
+export function PreviewCanvas({ canvasState, onStateChange, onFileSelect, isProcessing, canvasHook }: PreviewCanvasProps) {
+  const { canvasRef, drawMockup } = canvasHook;
   const [isDragOver, setIsDragOver] = useState(false);
   const { toast } = useToast();
 

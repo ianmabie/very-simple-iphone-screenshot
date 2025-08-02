@@ -87,7 +87,7 @@ export const deviceFrames: DeviceFrame[] = [
     hasNotch: true,
     hasDynamicIsland: false,
     homeIndicator: { x: 134, y: 588, width: 32, height: 4 },
-    notch: { x: 130, y: 8, width: 40, height: 16 }
+    notch: { x: 115, y: 8, width: 70, height: 24 }
   },
   {
     id: 'iphone-13-pro',
@@ -100,7 +100,7 @@ export const deviceFrames: DeviceFrame[] = [
     hasNotch: true,
     hasDynamicIsland: false,
     homeIndicator: { x: 134, y: 588, width: 32, height: 4 },
-    notch: { x: 130, y: 8, width: 40, height: 16 }
+    notch: { x: 115, y: 8, width: 70, height: 24 }
   },
   {
     id: 'iphone-13',
@@ -113,6 +113,6 @@ export const deviceFrames: DeviceFrame[] = [
     hasNotch: true,
     hasDynamicIsland: false,
     homeIndicator: { x: 134, y: 588, width: 32, height: 4 },
-    notch: { x: 130, y: 8, width: 40, height: 16 }
+    notch: { x: 115, y: 8, width: 70, height: 24 }
   }
 ];

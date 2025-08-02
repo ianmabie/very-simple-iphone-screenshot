@@ -26,8 +26,9 @@ export default function Home() {
     backgroundGradient: 'transparent'
   });
 
-  const { exportCanvas } = useCanvas();
   const { toast } = useToast();
+  const canvasHook = useCanvas();
+  const { exportCanvas } = canvasHook;
 
   const handleFileSelect = useCallback(async (file: File) => {
     setIsProcessing(true);
@@ -138,6 +139,7 @@ export default function Home() {
             onStateChange={handleStateChange}
             onFileSelect={handleFileSelect}
             isProcessing={isProcessing}
+            canvasHook={canvasHook}
           />
           
           <div className="mt-8 space-y-6">
@@ -153,7 +155,7 @@ export default function Home() {
         </div>
 
         <ExportPanel
-          hasContent={hasContent}
+          hasContent={!!hasContent}
           onExport={handleExport}
         />
       </main>
