@@ -140,7 +140,7 @@ export function PreviewCanvas({ canvasState, onStateChange, onFileSelect, isProc
                 onClick={() => handleRemoveImage(onStateChange)}
                 variant="outline"
                 size="sm"
-                className="absolute top-2 right-2 bg-white/90 hover:bg-white border border-gray-200 shadow-sm"
+                className="absolute -top-12 right-0 bg-white/90 hover:bg-white border border-gray-200 shadow-sm"
               >
                 <X className="w-4 h-4 mr-2" />
                 Remove Image

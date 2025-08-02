@@ -48,7 +48,7 @@ export const deviceFrames: DeviceFrame[] = [
     hasNotch: false,
     hasDynamicIsland: true,
     homeIndicator: { x: 134, y: 588, width: 32, height: 4 },
-    dynamicIsland: { x: 120, y: 16, width: 60, height: 20 }
+    dynamicIsland: { x: 115, y: 16, width: 70, height: 20 }
   },
   {
     id: 'iphone-15',
@@ -61,7 +61,7 @@ export const deviceFrames: DeviceFrame[] = [
     hasNotch: false,
     hasDynamicIsland: true,
     homeIndicator: { x: 134, y: 588, width: 32, height: 4 },
-    dynamicIsland: { x: 120, y: 16, width: 60, height: 20 }
+    dynamicIsland: { x: 115, y: 16, width: 70, height: 20 }
   },
   {
     id: 'iphone-14-pro',
@@ -74,7 +74,7 @@ export const deviceFrames: DeviceFrame[] = [
     hasNotch: false,
     hasDynamicIsland: true,
     homeIndicator: { x: 134, y: 588, width: 32, height: 4 },
-    dynamicIsland: { x: 120, y: 16, width: 60, height: 20 }
+    dynamicIsland: { x: 115, y: 16, width: 70, height: 20 }
   },
   {
     id: 'iphone-14',
