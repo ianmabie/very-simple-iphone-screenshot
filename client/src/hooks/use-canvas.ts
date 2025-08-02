@@ -136,8 +136,8 @@ export function useCanvas() {
 
     return new Promise<void>((resolve, reject) => {
       try {
-        // Create a high-resolution canvas for export (2x scale for better quality)
-        const scale = 2;
+        // Create a high-resolution canvas for export (4x scale for maximum quality)
+        const scale = 4;
         const exportCanvas = document.createElement('canvas');
         exportCanvas.width = canvas.width * scale;
         exportCanvas.height = canvas.height * scale;
@@ -148,8 +148,9 @@ export function useCanvas() {
           return;
         }
         
-        // Configure context for high quality
-        exportCtx.imageSmoothingEnabled = false;
+        // Configure context for maximum quality
+        exportCtx.imageSmoothingEnabled = true;
+        exportCtx.imageSmoothingQuality = 'high';
         exportCtx.scale(scale, scale);
         
         // Copy the original canvas content to the high-res canvas

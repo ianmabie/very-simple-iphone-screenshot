@@ -44,11 +44,11 @@ export const deviceFrames: DeviceFrame[] = [
     dimensions: { width: 300, height: 600 },
     screenArea: { x: 8, y: 8, width: 284, height: 584 },
     frameColor: '#1f2937',
-    cornerRadius: 24,
+    cornerRadius: 32,
     hasNotch: false,
     hasDynamicIsland: true,
     homeIndicator: { x: 134, y: 588, width: 32, height: 4 },
-    dynamicIsland: { x: 115, y: 16, width: 70, height: 20 }
+    dynamicIsland: { x: 108, y: 14, width: 84, height: 24 }
   },
   {
     id: 'iphone-15',
@@ -57,11 +57,11 @@ export const deviceFrames: DeviceFrame[] = [
     dimensions: { width: 300, height: 600 },
     screenArea: { x: 8, y: 8, width: 284, height: 584 },
     frameColor: '#1f2937',
-    cornerRadius: 24,
+    cornerRadius: 32,
     hasNotch: false,
     hasDynamicIsland: true,
     homeIndicator: { x: 134, y: 588, width: 32, height: 4 },
-    dynamicIsland: { x: 115, y: 16, width: 70, height: 20 }
+    dynamicIsland: { x: 108, y: 14, width: 84, height: 24 }
   },
   {
     id: 'iphone-14-pro',
@@ -70,11 +70,11 @@ export const deviceFrames: DeviceFrame[] = [
     dimensions: { width: 300, height: 600 },
     screenArea: { x: 8, y: 8, width: 284, height: 584 },
     frameColor: '#1f2937',
-    cornerRadius: 24,
+    cornerRadius: 32,
     hasNotch: false,
     hasDynamicIsland: true,
     homeIndicator: { x: 134, y: 588, width: 32, height: 4 },
-    dynamicIsland: { x: 115, y: 16, width: 70, height: 20 }
+    dynamicIsland: { x: 108, y: 14, width: 84, height: 24 }
   },
   {
     id: 'iphone-14',
