@@ -112,7 +112,7 @@ export function PreviewCanvas({ canvasState, onStateChange, onFileSelect, isProc
                 ? 'border-gray-300 hover:border-blue-500 hover:bg-blue-50' 
                 : 'border-gray-300'
           } ${isProcessing ? 'opacity-50 pointer-events-none' : ''}`}
-          style={{ minHeight: hasContent ? 'auto' : '400px' }}
+          style={{ minHeight: hasContent ? 'auto' : '300px' }}
           onDrop={handleDrop}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}

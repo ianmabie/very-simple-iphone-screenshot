@@ -161,9 +161,9 @@ export default function Home() {
 
         {/* Desktop Layout - Two Columns */}
         <div className="hidden lg:block">
-          <div className="grid grid-cols-2 gap-8 h-[calc(100vh-12rem)]">
-            {/* Left Column - Preview Canvas */}
-            <div className="flex flex-col">
+          <div className="grid grid-cols-5 gap-8 h-[calc(100vh-12rem)]">
+            {/* Left Column - Preview Canvas (3/5 width) */}
+            <div className="col-span-3 flex flex-col">
               <PreviewCanvas
                 canvasState={canvasState}
                 onStateChange={handleStateChange}
@@ -173,14 +173,14 @@ export default function Home() {
               />
             </div>
 
-            {/* Right Column - Controls */}
-            <div className="flex flex-col space-y-6">
+            {/* Right Column - Controls (2/5 width) */}
+            <div className="col-span-2 flex flex-col">
               <ImageInfo 
                 dimensions={imageDimensions}
                 recommendedDevice="iPhone 15 Pro (Dynamic Island)"
               />
               
-              <div className="flex-1 flex flex-col justify-end">
+              <div className="flex-1 flex flex-col justify-center">
                 <ExportPanel
                   hasContent={!!hasContent}
                   onExport={handleExport}
