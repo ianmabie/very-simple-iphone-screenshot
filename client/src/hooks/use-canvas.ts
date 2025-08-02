@@ -70,18 +70,13 @@ export function useCanvas() {
 
     // Draw screenshot if available
     if (image) {
-      const screenCenterX = deviceFrame.screenArea.x + deviceFrame.screenArea.width / 2;
-      const screenCenterY = deviceFrame.screenArea.y + deviceFrame.screenArea.height / 2;
-      
-      const scaledWidth = image.width * scale;
-      const scaledHeight = image.height * scale;
-      
+      // Fit image to screen area exactly
       ctx.drawImage(
         image,
-        screenCenterX + position.x - scaledWidth / 2,
-        screenCenterY + position.y - scaledHeight / 2,
-        scaledWidth,
-        scaledHeight
+        deviceFrame.screenArea.x,
+        deviceFrame.screenArea.y,
+        deviceFrame.screenArea.width,
+        deviceFrame.screenArea.height
       );
     }
 
@@ -134,25 +129,34 @@ export function useCanvas() {
 
   const exportCanvas = useCallback(async (filename: string = 'mockup-iphone-screenshot.png') => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    if (!canvas) throw new Error('Canvas not available');
 
-    return new Promise<void>((resolve) => {
-      canvas.toBlob((blob) => {
-        if (!blob) {
-          resolve();
-          return;
-        }
-        
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = filename;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-        resolve();
-      }, 'image/png', 1);
+    return new Promise<void>((resolve, reject) => {
+      try {
+        canvas.toBlob((blob) => {
+          if (!blob) {
+            reject(new Error('Failed to create blob'));
+            return;
+          }
+          
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = filename;
+          a.style.display = 'none';
+          document.body.appendChild(a);
+          a.click();
+          
+          // Clean up after a short delay
+          setTimeout(() => {
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            resolve();
+          }, 100);
+        }, 'image/png', 1.0);
+      } catch (error) {
+        reject(error);
+      }
     });
   }, []);
 

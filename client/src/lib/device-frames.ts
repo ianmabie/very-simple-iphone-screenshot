@@ -38,9 +38,9 @@ export interface DeviceFrame {
 
 export const deviceFrames: DeviceFrame[] = [
   {
-    id: 'iphone-14-pro',
-    name: 'iPhone 14 Pro',
-    displayName: 'iPhone 14 Pro',
+    id: 'iphone-15-pro',
+    name: 'iPhone 15 Pro',
+    displayName: 'iPhone 15 Pro',
     dimensions: { width: 300, height: 600 },
     screenArea: { x: 8, y: 8, width: 284, height: 584 },
     frameColor: '#1f2937',
@@ -64,20 +64,48 @@ export const deviceFrames: DeviceFrame[] = [
     dynamicIsland: { x: 120, y: 16, width: 60, height: 20 }
   },
   {
-    id: 'iphone-se',
-    name: 'iPhone SE',
-    displayName: 'iPhone SE',
-    dimensions: { width: 280, height: 560 },
-    screenArea: { x: 8, y: 60, width: 264, height: 440 },
+    id: 'iphone-14-pro',
+    name: 'iPhone 14 Pro',
+    displayName: 'iPhone 14 Pro',
+    dimensions: { width: 300, height: 600 },
+    screenArea: { x: 8, y: 8, width: 284, height: 584 },
     frameColor: '#1f2937',
-    cornerRadius: 16,
+    cornerRadius: 24,
     hasNotch: false,
-    hasDynamicIsland: false
+    hasDynamicIsland: true,
+    homeIndicator: { x: 134, y: 588, width: 32, height: 4 },
+    dynamicIsland: { x: 120, y: 16, width: 60, height: 20 }
   },
   {
-    id: 'iphone-12',
-    name: 'iPhone 12',
-    displayName: 'iPhone 12',
+    id: 'iphone-14',
+    name: 'iPhone 14',
+    displayName: 'iPhone 14',
+    dimensions: { width: 300, height: 600 },
+    screenArea: { x: 8, y: 8, width: 284, height: 584 },
+    frameColor: '#1f2937',
+    cornerRadius: 24,
+    hasNotch: true,
+    hasDynamicIsland: false,
+    homeIndicator: { x: 134, y: 588, width: 32, height: 4 },
+    notch: { x: 130, y: 8, width: 40, height: 16 }
+  },
+  {
+    id: 'iphone-13-pro',
+    name: 'iPhone 13 Pro',
+    displayName: 'iPhone 13 Pro',
+    dimensions: { width: 300, height: 600 },
+    screenArea: { x: 8, y: 8, width: 284, height: 584 },
+    frameColor: '#1f2937',
+    cornerRadius: 24,
+    hasNotch: true,
+    hasDynamicIsland: false,
+    homeIndicator: { x: 134, y: 588, width: 32, height: 4 },
+    notch: { x: 130, y: 8, width: 40, height: 16 }
+  },
+  {
+    id: 'iphone-13',
+    name: 'iPhone 13',
+    displayName: 'iPhone 13',
     dimensions: { width: 300, height: 600 },
     screenArea: { x: 8, y: 8, width: 284, height: 584 },
     frameColor: '#1f2937',

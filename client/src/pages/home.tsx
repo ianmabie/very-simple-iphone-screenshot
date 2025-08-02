@@ -1,8 +1,8 @@
 import { useState, useCallback } from 'react';
 import { Smartphone, Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { WorkflowSteps } from '@/components/WorkflowSteps';
-import { FileUploadZone } from '@/components/FileUploadZone';
+
+
 import { DeviceSelector } from '@/components/DeviceSelector';
 import { PreviewCanvas } from '@/components/PreviewCanvas';
 import { ExportPanel } from '@/components/ExportPanel';
@@ -43,24 +43,13 @@ export default function Home() {
       setImageDimensions(dimensions);
       setRecommendedDevice(recommended);
       
-      // Auto-fit image to device screen
-      if (canvasState.deviceFrame) {
-        const fitted = fitImageToArea(
-          image.width,
-          image.height,
-          canvasState.deviceFrame.screenArea.width,
-          canvasState.deviceFrame.screenArea.height
-        );
-        
-        setCanvasState(prev => ({
-          ...prev,
-          image,
-          scale: fitted.scale,
-          position: { x: 0, y: 0 }
-        }));
-      } else {
-        setCanvasState(prev => ({ ...prev, image }));
-      }
+      // Set image to canvas state
+      setCanvasState(prev => ({
+        ...prev,
+        image,
+        scale: 1,
+        position: { x: 0, y: 0 }
+      }));
 
       setCurrentStep(3);
       toast({
@@ -80,23 +69,12 @@ export default function Home() {
   }, [canvasState.deviceFrame, toast]);
 
   const handleDeviceSelect = useCallback((device: DeviceFrame) => {
-    setCanvasState(prev => {
-      const newState = { ...prev, deviceFrame: device };
-      
-      // Re-fit image if one is loaded
-      if (prev.image) {
-        const fitted = fitImageToArea(
-          prev.image.width,
-          prev.image.height,
-          device.screenArea.width,
-          device.screenArea.height
-        );
-        newState.scale = fitted.scale;
-        newState.position = { x: 0, y: 0 };
-      }
-      
-      return newState;
-    });
+    setCanvasState(prev => ({
+      ...prev,
+      deviceFrame: device,
+      position: { x: 0, y: 0 },
+      scale: 1
+    }));
   }, []);
 
   const handleStateChange = useCallback((changes: Partial<CanvasState>) => {
@@ -128,7 +106,7 @@ export default function Home() {
             <div className="flex items-center space-x-4">
               <Button size="sm" variant="outline" className="text-gray-500">
                 <Star className="w-4 h-4 mr-2" />
-                Coming Soon
+                Pro Mode Coming Soon
               </Button>
             </div>
           </div>
@@ -136,14 +114,15 @@ export default function Home() {
       </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <WorkflowSteps currentStep={currentStep} />
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-1">
-            <FileUploadZone 
-              onFileSelect={handleFileSelect}
-              isProcessing={isProcessing}
-            />
+        <div className="max-w-4xl mx-auto">
+          <PreviewCanvas
+            canvasState={canvasState}
+            onStateChange={handleStateChange}
+            onFileSelect={handleFileSelect}
+            isProcessing={isProcessing}
+          />
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
             <DeviceSelector
               selectedDevice={canvasState.deviceFrame}
               onDeviceSelect={handleDeviceSelect}
@@ -153,11 +132,6 @@ export default function Home() {
               recommendedDevice={recommendedDevice}
             />
           </div>
-
-          <PreviewCanvas
-            canvasState={canvasState}
-            onStateChange={handleStateChange}
-          />
         </div>
 
         <ExportPanel

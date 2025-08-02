@@ -1,16 +1,20 @@
-import { useEffect } from 'react';
+import { useEffect, useCallback, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Slider } from '@/components/ui/slider';
-import { RotateCcw, Maximize2, ZoomIn, ZoomOut } from 'lucide-react';
+import { Upload } from 'lucide-react';
 import { useCanvas, CanvasState } from '@/hooks/use-canvas';
+import { useToast } from '@/hooks/use-toast';
 
 interface PreviewCanvasProps {
   canvasState: CanvasState;
   onStateChange: (state: Partial<CanvasState>) => void;
+  onFileSelect: (file: File) => void;
+  isProcessing: boolean;
 }
 
-export function PreviewCanvas({ canvasState, onStateChange }: PreviewCanvasProps) {
+export function PreviewCanvas({ canvasState, onStateChange, onFileSelect, isProcessing }: PreviewCanvasProps) {
   const { canvasRef, drawMockup } = useCanvas();
+  const [isDragOver, setIsDragOver] = useState(false);
+  const { toast } = useToast();
 
   useEffect(() => {
     drawMockup(canvasState);
@@ -18,104 +22,124 @@ export function PreviewCanvas({ canvasState, onStateChange }: PreviewCanvasProps
 
   const hasContent = canvasState.image && canvasState.deviceFrame;
 
+  const validateFile = useCallback((file: File): boolean => {
+    const validTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/heic'];
+    const maxSize = 10 * 1024 * 1024; // 10MB
+
+    if (!validTypes.includes(file.type)) {
+      toast({
+        title: 'Invalid file type',
+        description: 'Please upload a PNG, JPG, or HEIC file.',
+        variant: 'destructive'
+      });
+      return false;
+    }
+
+    if (file.size > maxSize) {
+      toast({
+        title: 'File too large',
+        description: 'Please upload a file smaller than 10MB.',
+        variant: 'destructive'
+      });
+      return false;
+    }
+
+    return true;
+  }, [toast]);
+
+  const handleFileSelect = useCallback((file: File) => {
+    if (validateFile(file)) {
+      onFileSelect(file);
+    }
+  }, [validateFile, onFileSelect]);
+
+  const handleDrop = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragOver(false);
+
+    const files = Array.from(e.dataTransfer.files);
+    if (files.length > 0) {
+      handleFileSelect(files[0]);
+    }
+  }, [handleFileSelect]);
+
+  const handleDragOver = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragOver(true);
+  }, []);
+
+  const handleDragLeave = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragOver(false);
+  }, []);
+
+  const handleFileInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      handleFileSelect(files[0]);
+    }
+  }, [handleFileSelect]);
+
 
 
   return (
-    <div className="lg:col-span-2">
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200">
-        <div className="border-b border-gray-200 p-4 flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-gray-900">Preview</h2>
-          <div className="flex items-center space-x-2">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => onStateChange({ position: { x: 0, y: 0 }, scale: 1 })}
-              disabled={!hasContent}
-              title="Reset"
-            >
-              <RotateCcw className="w-4 h-4" />
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              disabled={!hasContent}
-              title="Zoom fit"
-            >
-              <Maximize2 className="w-4 h-4" />
-            </Button>
-          </div>
-        </div>
+    <div className="bg-white rounded-xl shadow-sm border border-gray-200">
+      <div className="border-b border-gray-200 p-4">
+        <h2 className="text-lg font-semibold text-gray-900">Preview</h2>
+      </div>
 
-        <div className="p-8">
-          <div className="flex items-center justify-center min-h-96 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
-            {!hasContent ? (
-              <div className="text-center space-y-4">
-                <div className="mx-auto w-20 h-20 bg-gray-200 rounded-full flex items-center justify-center">
-                  <svg className="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                  </svg>
-                </div>
-                <div>
-                  <p className="text-lg font-medium text-gray-500">No screenshot uploaded</p>
-                  <p className="text-sm text-gray-400 mt-1">Upload an iPhone screenshot to get started</p>
-                </div>
+      <div className="p-8">
+        <div 
+          className={`flex items-center justify-center min-h-96 bg-gray-50 rounded-lg border-2 border-dashed transition-all cursor-pointer ${
+            isDragOver
+              ? 'border-blue-500 bg-blue-50'
+              : !hasContent 
+                ? 'border-gray-300 hover:border-blue-500 hover:bg-blue-50' 
+                : 'border-gray-300'
+          } ${isProcessing ? 'opacity-50 pointer-events-none' : ''}`}
+          onDrop={handleDrop}
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          onClick={() => !hasContent && document.getElementById('preview-file-input')?.click()}
+        >
+          {!hasContent ? (
+            <div className="text-center space-y-4">
+              <div className="mx-auto w-20 h-20 bg-gray-200 rounded-full flex items-center justify-center">
+                <Upload className="w-10 h-10 text-gray-400" />
               </div>
-            ) : (
-              <div className="relative">
-                <canvas
-                  ref={canvasRef}
-                  className="max-w-full max-h-96 object-contain"
-                  style={{ imageRendering: 'crisp-edges' }}
-                />
+              <div>
+                <p className="text-lg font-medium text-gray-900">Drag & drop your screenshot</p>
+                <p className="text-sm text-gray-500 mt-1">or click to browse files</p>
+                <p className="text-xs text-gray-400 mt-2">Supports PNG, JPG, HEIC up to 10MB</p>
               </div>
-            )}
-          </div>
-        </div>
-
-        <div className="border-t border-gray-200 p-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <label className="text-sm font-medium text-gray-700">Scale</label>
-              <div className="flex items-center space-x-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => onStateChange({ scale: Math.max(0.1, canvasState.scale - 0.1) })}
-                  disabled={!hasContent}
-                >
-                  <ZoomOut className="w-4 h-4 text-gray-400" />
-                </Button>
-                <Slider
-                  value={[canvasState.scale]}
-                  onValueChange={([scale]) => onStateChange({ scale })}
-                  min={0.1}
-                  max={3}
-                  step={0.1}
-                  disabled={!hasContent}
-                  className="w-32"
-                />
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => onStateChange({ scale: Math.min(3, canvasState.scale + 0.1) })}
-                  disabled={!hasContent}
-                >
-                  <ZoomIn className="w-4 h-4 text-gray-400" />
-                </Button>
-              </div>
+              <Button
+                type="button"
+                className="bg-blue-500 hover:bg-blue-600 text-white"
+                disabled={isProcessing}
+              >
+                Choose File
+              </Button>
             </div>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => onStateChange({ scale: 1 })}
-              disabled={!hasContent}
-              title="Reset scale to original"
-            >
-              Reset Scale
-            </Button>
-          </div>
+          ) : (
+            <div className="relative">
+              <canvas
+                ref={canvasRef}
+                className="max-w-full max-h-96 object-contain"
+                style={{ imageRendering: 'crisp-edges' }}
+              />
+            </div>
+          )}
         </div>
       </div>
+
+      <input
+        id="preview-file-input"
+        type="file"
+        accept="image/png,image/jpeg,image/jpg,image/heic"
+        onChange={handleFileInputChange}
+        className="hidden"
+        disabled={isProcessing}
+      />
     </div>
   );
 }

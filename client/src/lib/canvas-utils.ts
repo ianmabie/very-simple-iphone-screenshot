@@ -91,10 +91,12 @@ export function recommendDevice(imageWidth: number, imageHeight: number) {
   
   // Common iPhone aspect ratios
   const devices = [
-    { name: 'iPhone 14 Pro', aspectRatio: 0.486, screenWidth: 393, screenHeight: 852 },
+    { name: 'iPhone 15 Pro', aspectRatio: 0.486, screenWidth: 393, screenHeight: 852 },
     { name: 'iPhone 15', aspectRatio: 0.486, screenWidth: 393, screenHeight: 852 },
-    { name: 'iPhone 12', aspectRatio: 0.486, screenWidth: 390, screenHeight: 844 },
-    { name: 'iPhone SE', aspectRatio: 0.562, screenWidth: 375, screenHeight: 667 }
+    { name: 'iPhone 14 Pro', aspectRatio: 0.486, screenWidth: 393, screenHeight: 852 },
+    { name: 'iPhone 14', aspectRatio: 0.486, screenWidth: 390, screenHeight: 844 },
+    { name: 'iPhone 13 Pro', aspectRatio: 0.486, screenWidth: 390, screenHeight: 844 },
+    { name: 'iPhone 13', aspectRatio: 0.486, screenWidth: 390, screenHeight: 844 }
   ];
   
   let bestMatch = devices[0];

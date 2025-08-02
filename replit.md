@@ -7,6 +7,7 @@ This is a full-stack web application for creating device mockups from screenshot
 ## User Preferences
 
 Preferred communication style: Simple, everyday language.
+Interface preference: Clean, simplified UI with minimal controls and automatic features.
 
 ## System Architecture
 
@@ -28,11 +29,12 @@ Preferred communication style: Simple, everyday language.
 - **Development Setup**: Hot reloading with Vite integration in development mode
 
 ### Core Features
-- **Device Frame Library**: Predefined device frames (iPhone models) with accurate dimensions and styling
-- **Image Processing**: Client-side image manipulation using Canvas API for fitting images to device screens
-- **Export System**: PNG export with configurable quality settings
-- **Responsive Design**: Mobile-first approach with responsive layouts
-- **Real-time Preview**: Live canvas preview with zoom, pan, and positioning controls
+- **Device Frame Library**: iPhone models from iPhone 13 onwards with proper notch/Dynamic Island designs
+- **Unified Interface**: Combined upload and preview area with drag-and-drop functionality
+- **Automatic Image Fitting**: Screenshots are automatically fitted to device screen areas without manual scaling
+- **Export System**: PNG export with transparent background
+- **Device Recommendation**: Automatic device suggestion based on screenshot dimensions
+- **Modern iPhone Support**: Includes iPhone 15 Pro/15 (Dynamic Island) and iPhone 13/14 (notch) variants
 
 ### Build and Deployment
 - **Development**: Vite dev server with Express backend proxy
