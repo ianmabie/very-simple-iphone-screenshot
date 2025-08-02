@@ -8,8 +8,7 @@ A simple, client-side web application for creating professional iPhone mockups f
 
 - **Drag & Drop Upload**: Simple file upload with support for PNG, JPG, and HEIC formats
 - **Automatic Device Detection**: Smart device recommendation based on screenshot dimensions
-- **Dynamic Island Support**: Modern iPhone 15 Pro/15 frames with authentic Dynamic Island design
-- **Classic iPhone Support**: iPhone 13/14 models with traditional notch design
+- **Dynamic Island Design**: Authentic iPhone frames with modern Dynamic Island styling
 - **High-Quality Export**: Export mockups as PNG files with transparent backgrounds
 - **Dual Quality Options**: Choose between high-quality (~2.8MB) and low-quality (~1.2MB) exports
 - **Client-Side Processing**: All image processing happens in your browser - no data leaves your device
@@ -17,12 +16,10 @@ A simple, client-side web application for creating professional iPhone mockups f
 
 ## Device Frames Included
 
-### Modern (Dynamic Island)
+All iPhone models feature Dynamic Island design for a modern, consistent appearance:
 - iPhone 15 Pro
-- iPhone 15
+- iPhone 15  
 - iPhone 14 Pro
-
-### Classic (Notch)
 - iPhone 14
 - iPhone 13 Pro
 - iPhone 13
@@ -60,7 +57,7 @@ A simple, client-side web application for creating professional iPhone mockups f
 
 If you encounter port issues, try:
 - Using a different port: `PORT=3000 npm run dev`
-- Ensuring no other applications are using the port
+- Ensuring no other applications are using port 3001
 
 ## Usage
 
@@ -126,14 +123,15 @@ COPY package*.json ./
 RUN npm install --only=production
 COPY . .
 RUN npm run build
-EXPOSE 5000
+EXPOSE 3001
 CMD ["npm", "start"]
 ```
 
 ### Traditional Hosting
 1. Run `npm run build`
 2. Copy the `dist/` folder to your server
-3. Run `node dist/index.js`
+3. Set `PORT=80` (or your preferred port)
+4. Run `node dist/index.js`
 
 ## Project Structure
 
@@ -181,6 +179,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - iPhone frame designs based on official Apple specifications
 - Dynamic Island proportions carefully measured for authenticity
 - Built with modern web technologies for optimal performance
+- Simplified architecture eliminates database dependencies for easy deployment
 
 ---
 
