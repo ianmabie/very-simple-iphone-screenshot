@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
-import { RotateCcw, Maximize2, Move, ZoomIn, ZoomOut, Plus } from 'lucide-react';
+import { RotateCcw, Maximize2, ZoomIn, ZoomOut } from 'lucide-react';
 import { useCanvas, CanvasState } from '@/hooks/use-canvas';
 
 interface PreviewCanvasProps {
@@ -18,11 +18,7 @@ export function PreviewCanvas({ canvasState, onStateChange }: PreviewCanvasProps
 
   const hasContent = canvasState.image && canvasState.deviceFrame;
 
-  const backgroundOptions = [
-    { id: 'gray', gradient: 'linear-gradient(135deg, #f3f4f6, #d1d5db)' },
-    { id: 'blue', gradient: 'linear-gradient(135deg, #60a5fa, #2563eb)' },
-    { id: 'purple', gradient: 'linear-gradient(135deg, #a78bfa, #ec4899)' }
-  ];
+
 
   return (
     <div className="lg:col-span-2">
@@ -77,42 +73,9 @@ export function PreviewCanvas({ canvasState, onStateChange }: PreviewCanvasProps
         </div>
 
         <div className="border-t border-gray-200 p-4">
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Position</label>
-              <div className="flex items-center space-x-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  disabled={!hasContent}
-                >
-                  <Move className="w-4 h-4 text-gray-400" />
-                </Button>
-                <div className="flex-1 space-y-1">
-                  <Slider
-                    value={[canvasState.position.x]}
-                    onValueChange={([x]) => onStateChange({ position: { ...canvasState.position, x } })}
-                    min={-100}
-                    max={100}
-                    step={1}
-                    disabled={!hasContent}
-                    className="w-full"
-                  />
-                  <Slider
-                    value={[canvasState.position.y]}
-                    onValueChange={([y]) => onStateChange({ position: { ...canvasState.position, y } })}
-                    min={-100}
-                    max={100}
-                    step={1}
-                    disabled={!hasContent}
-                    className="w-full"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Scale</label>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <label className="text-sm font-medium text-gray-700">Scale</label>
               <div className="flex items-center space-x-2">
                 <Button
                   variant="outline"
@@ -129,7 +92,7 @@ export function PreviewCanvas({ canvasState, onStateChange }: PreviewCanvasProps
                   max={3}
                   step={0.1}
                   disabled={!hasContent}
-                  className="flex-1"
+                  className="w-32"
                 />
                 <Button
                   variant="outline"
@@ -141,32 +104,15 @@ export function PreviewCanvas({ canvasState, onStateChange }: PreviewCanvasProps
                 </Button>
               </div>
             </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Background</label>
-              <div className="flex items-center space-x-2">
-                {backgroundOptions.map((option) => (
-                  <button
-                    key={option.id}
-                    onClick={() => onStateChange({ backgroundGradient: option.id })}
-                    className={`w-8 h-8 rounded border-2 shadow-sm ${
-                      canvasState.backgroundGradient === option.id
-                        ? 'border-blue-500'
-                        : 'border-white'
-                    }`}
-                    style={{ background: option.gradient }}
-                  />
-                ))}
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="w-8 h-8 border-2 border-dashed border-gray-300 p-0"
-                  disabled
-                >
-                  <Plus className="w-3 h-3 text-gray-400" />
-                </Button>
-              </div>
-            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => onStateChange({ scale: 1 })}
+              disabled={!hasContent}
+              title="Reset scale to original"
+            >
+              Reset Scale
+            </Button>
           </div>
         </div>
       </div>

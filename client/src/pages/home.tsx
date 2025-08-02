@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { Smartphone, HelpCircle, Star } from 'lucide-react';
+import { Smartphone, Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { WorkflowSteps } from '@/components/WorkflowSteps';
 import { FileUploadZone } from '@/components/FileUploadZone';
@@ -7,20 +7,23 @@ import { DeviceSelector } from '@/components/DeviceSelector';
 import { PreviewCanvas } from '@/components/PreviewCanvas';
 import { ExportPanel } from '@/components/ExportPanel';
 import { LoadingOverlay } from '@/components/LoadingOverlay';
+import { ImageInfo } from '@/components/ImageInfo';
 import { DeviceFrame, deviceFrames } from '@/lib/device-frames';
-import { loadImageFromFile, fitImageToArea } from '@/lib/canvas-utils';
+import { loadImageFromFile, fitImageToArea, getImageDimensions, recommendDevice } from '@/lib/canvas-utils';
 import { useCanvas, CanvasState } from '@/hooks/use-canvas';
 import { useToast } from '@/hooks/use-toast';
 
 export default function Home() {
   const [currentStep, setCurrentStep] = useState(1);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [imageDimensions, setImageDimensions] = useState<{ width: number; height: number } | null>(null);
+  const [recommendedDevice, setRecommendedDevice] = useState<string | null>(null);
   const [canvasState, setCanvasState] = useState<CanvasState>({
     image: null,
     deviceFrame: deviceFrames[1], // iPhone 15 as default
     position: { x: 0, y: 0 },
     scale: 1,
-    backgroundGradient: 'gray'
+    backgroundGradient: 'transparent'
   });
 
   const { exportCanvas } = useCanvas();
@@ -32,6 +35,13 @@ export default function Home() {
 
     try {
       const image = await loadImageFromFile(file);
+      
+      // Get image dimensions and recommend device
+      const dimensions = getImageDimensions(image);
+      const recommended = recommendDevice(dimensions.width, dimensions.height);
+      
+      setImageDimensions(dimensions);
+      setRecommendedDevice(recommended);
       
       // Auto-fit image to device screen
       if (canvasState.deviceFrame) {
@@ -116,12 +126,9 @@ export default function Home() {
               <span className="text-sm text-gray-500 hidden sm:inline">iPhone Screenshot Formatter</span>
             </div>
             <div className="flex items-center space-x-4">
-              <Button variant="ghost" size="sm">
-                <HelpCircle className="w-4 h-4" />
-              </Button>
-              <Button size="sm" className="bg-blue-500 hover:bg-blue-600 text-white">
+              <Button size="sm" variant="outline" className="text-gray-500">
                 <Star className="w-4 h-4 mr-2" />
-                Pro
+                Coming Soon
               </Button>
             </div>
           </div>
@@ -140,6 +147,10 @@ export default function Home() {
             <DeviceSelector
               selectedDevice={canvasState.deviceFrame}
               onDeviceSelect={handleDeviceSelect}
+            />
+            <ImageInfo 
+              dimensions={imageDimensions}
+              recommendedDevice={recommendedDevice}
             />
           </div>
 

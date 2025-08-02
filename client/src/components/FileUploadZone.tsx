@@ -71,11 +71,11 @@ export function FileUploadZone({ onFileSelect, isProcessing }: FileUploadZonePro
   }, [handleFileSelect]);
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-      <h2 className="text-lg font-semibold text-gray-900 mb-4">Upload Screenshot</h2>
+    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
+      <h2 className="text-lg font-semibold text-gray-900 mb-3">Upload Screenshot</h2>
       
       <div
-        className={`border-2 border-dashed rounded-lg p-8 text-center transition-all cursor-pointer ${
+        className={`border-2 border-dashed rounded-lg p-4 text-center transition-all cursor-pointer ${
           isDragOver
             ? 'border-blue-500 bg-blue-50'
             : 'border-gray-300 hover:border-blue-500 hover:bg-blue-50'
@@ -85,9 +85,9 @@ export function FileUploadZone({ onFileSelect, isProcessing }: FileUploadZonePro
         onDragLeave={handleDragLeave}
         onClick={() => document.getElementById('file-input')?.click()}
       >
-        <div className="space-y-4">
-          <div className="mx-auto w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center">
-            <Upload className="w-8 h-8 text-gray-400" />
+        <div className="space-y-2">
+          <div className="mx-auto w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center">
+            <Upload className="w-6 h-6 text-gray-400" />
           </div>
           <div>
             <p className="text-sm font-medium text-gray-900">Drag & drop your screenshot</p>
@@ -95,6 +95,7 @@ export function FileUploadZone({ onFileSelect, isProcessing }: FileUploadZonePro
           </div>
           <Button
             type="button"
+            size="sm"
             className="bg-blue-500 hover:bg-blue-600 text-white"
             disabled={isProcessing}
           >
@@ -112,14 +113,13 @@ export function FileUploadZone({ onFileSelect, isProcessing }: FileUploadZonePro
         disabled={isProcessing}
       />
 
-      <div className="mt-4 p-3 bg-gray-50 rounded-lg">
-        <p className="text-xs font-medium text-gray-700 mb-2">Supported formats:</p>
-        <div className="flex flex-wrap gap-2">
-          <span className="px-2 py-1 bg-white text-xs text-gray-600 rounded border">PNG</span>
-          <span className="px-2 py-1 bg-white text-xs text-gray-600 rounded border">JPG</span>
-          <span className="px-2 py-1 bg-white text-xs text-gray-600 rounded border">HEIC</span>
+      <div className="mt-3 p-2 bg-gray-50 rounded-lg">
+        <div className="flex flex-wrap gap-1 text-xs text-gray-600">
+          <span className="px-2 py-1 bg-white rounded border">PNG</span>
+          <span className="px-2 py-1 bg-white rounded border">JPG</span>
+          <span className="px-2 py-1 bg-white rounded border">HEIC</span>
+          <span className="text-gray-500 ml-2">Max: 10MB</span>
         </div>
-        <p className="text-xs text-gray-500 mt-2">Max file size: 10MB</p>
       </div>
     </div>
   );

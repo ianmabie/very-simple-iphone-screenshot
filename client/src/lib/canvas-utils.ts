@@ -78,3 +78,35 @@ export function fitImageToArea(
     scale
   };
 }
+
+export function getImageDimensions(image: HTMLImageElement): { width: number; height: number } {
+  return {
+    width: image.width,
+    height: image.height
+  };
+}
+
+export function recommendDevice(imageWidth: number, imageHeight: number) {
+  const aspectRatio = imageWidth / imageHeight;
+  
+  // Common iPhone aspect ratios
+  const devices = [
+    { name: 'iPhone 14 Pro', aspectRatio: 0.486, screenWidth: 393, screenHeight: 852 },
+    { name: 'iPhone 15', aspectRatio: 0.486, screenWidth: 393, screenHeight: 852 },
+    { name: 'iPhone 12', aspectRatio: 0.486, screenWidth: 390, screenHeight: 844 },
+    { name: 'iPhone SE', aspectRatio: 0.562, screenWidth: 375, screenHeight: 667 }
+  ];
+  
+  let bestMatch = devices[0];
+  let smallestDifference = Math.abs(aspectRatio - bestMatch.aspectRatio);
+  
+  for (const device of devices) {
+    const difference = Math.abs(aspectRatio - device.aspectRatio);
+    if (difference < smallestDifference) {
+      smallestDifference = difference;
+      bestMatch = device;
+    }
+  }
+  
+  return bestMatch.name;
+}

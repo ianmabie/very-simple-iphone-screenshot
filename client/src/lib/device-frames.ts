@@ -15,7 +15,20 @@ export interface DeviceFrame {
   frameColor: string;
   cornerRadius: number;
   hasNotch: boolean;
+  hasDynamicIsland: boolean;
   homeIndicator?: {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+  };
+  notch?: {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+  };
+  dynamicIsland?: {
     x: number;
     y: number;
     width: number;
@@ -32,8 +45,10 @@ export const deviceFrames: DeviceFrame[] = [
     screenArea: { x: 8, y: 8, width: 284, height: 584 },
     frameColor: '#1f2937',
     cornerRadius: 24,
-    hasNotch: true,
-    homeIndicator: { x: 134, y: 588, width: 32, height: 4 }
+    hasNotch: false,
+    hasDynamicIsland: true,
+    homeIndicator: { x: 134, y: 588, width: 32, height: 4 },
+    dynamicIsland: { x: 120, y: 16, width: 60, height: 20 }
   },
   {
     id: 'iphone-15',
@@ -43,8 +58,10 @@ export const deviceFrames: DeviceFrame[] = [
     screenArea: { x: 8, y: 8, width: 284, height: 584 },
     frameColor: '#1f2937',
     cornerRadius: 24,
-    hasNotch: true,
-    homeIndicator: { x: 134, y: 588, width: 32, height: 4 }
+    hasNotch: false,
+    hasDynamicIsland: true,
+    homeIndicator: { x: 134, y: 588, width: 32, height: 4 },
+    dynamicIsland: { x: 120, y: 16, width: 60, height: 20 }
   },
   {
     id: 'iphone-se',
@@ -54,7 +71,8 @@ export const deviceFrames: DeviceFrame[] = [
     screenArea: { x: 8, y: 60, width: 264, height: 440 },
     frameColor: '#1f2937',
     cornerRadius: 16,
-    hasNotch: false
+    hasNotch: false,
+    hasDynamicIsland: false
   },
   {
     id: 'iphone-12',
@@ -65,6 +83,8 @@ export const deviceFrames: DeviceFrame[] = [
     frameColor: '#1f2937',
     cornerRadius: 24,
     hasNotch: true,
-    homeIndicator: { x: 134, y: 588, width: 32, height: 4 }
+    hasDynamicIsland: false,
+    homeIndicator: { x: 134, y: 588, width: 32, height: 4 },
+    notch: { x: 130, y: 8, width: 40, height: 16 }
   }
 ];

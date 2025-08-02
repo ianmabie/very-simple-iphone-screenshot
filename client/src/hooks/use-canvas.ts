@@ -30,24 +30,7 @@ export function useCanvas() {
     // Clear canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Draw background gradient
-    const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
-    if (backgroundGradient === 'gray') {
-      gradient.addColorStop(0, '#f3f4f6');
-      gradient.addColorStop(1, '#d1d5db');
-    } else if (backgroundGradient === 'blue') {
-      gradient.addColorStop(0, '#60a5fa');
-      gradient.addColorStop(1, '#2563eb');
-    } else if (backgroundGradient === 'purple') {
-      gradient.addColorStop(0, '#a78bfa');
-      gradient.addColorStop(1, '#ec4899');
-    } else {
-      gradient.addColorStop(0, '#f3f4f6');
-      gradient.addColorStop(1, '#d1d5db');
-    }
-    
-    ctx.fillStyle = gradient;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    // Draw transparent background (no background fill for transparent export)
 
     // Device frame position (centered with padding)
     const frameX = padding;
@@ -114,6 +97,34 @@ export function useCanvas() {
         deviceFrame.homeIndicator.width,
         deviceFrame.homeIndicator.height,
         deviceFrame.homeIndicator.height / 2
+      );
+      ctx.fill();
+    }
+
+    // Draw notch if device has one
+    if (deviceFrame.notch) {
+      ctx.fillStyle = deviceFrame.frameColor;
+      drawRoundedRect(
+        ctx,
+        deviceFrame.notch.x,
+        deviceFrame.notch.y,
+        deviceFrame.notch.width,
+        deviceFrame.notch.height,
+        8
+      );
+      ctx.fill();
+    }
+
+    // Draw Dynamic Island if device has one
+    if (deviceFrame.dynamicIsland) {
+      ctx.fillStyle = '#000000';
+      drawRoundedRect(
+        ctx,
+        deviceFrame.dynamicIsland.x,
+        deviceFrame.dynamicIsland.y,
+        deviceFrame.dynamicIsland.width,
+        deviceFrame.dynamicIsland.height,
+        10
       );
       ctx.fill();
     }
