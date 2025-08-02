@@ -8,6 +8,7 @@ This is a client-side web application for creating device mockups from screensho
 
 Preferred communication style: Simple, everyday language.
 Interface preference: Clean, simplified UI with minimal controls and automatic features.
+Layout preference: Optimized for MacBook screens with everything fitting without scrolling.
 
 ## System Architecture
 
@@ -29,19 +30,21 @@ Interface preference: Clean, simplified UI with minimal controls and automatic f
 - **Development Setup**: Hot reloading with Vite integration in development mode
 
 ### Core Features
-- **Device Frame Library**: iPhone models from iPhone 13 onwards with proper notch/Dynamic Island designs
+- **Device Frame Library**: iPhone models from iPhone 13 onwards with Dynamic Island design
 - **Unified Interface**: Combined upload and preview area with drag-and-drop functionality
 - **Automatic Image Fitting**: Screenshots are automatically fitted to device screen areas without manual scaling
-- **Export System**: PNG export with transparent background
+- **Export System**: PNG export with transparent background in two quality options
 - **Device Recommendation**: Automatic device suggestion based on screenshot dimensions
-- **Modern iPhone Support**: Includes iPhone 15 Pro/15 (Dynamic Island) and iPhone 13/14 (notch) variants
+- **MacBook-Optimized Layout**: Desktop horizontal layout with preview on left, controls on right
+- **Responsive Design**: Mobile vertical layout, desktop two-column layout
 
 ### Build and Deployment
-- **Development**: Vite dev server with Express backend proxy
+- **Development**: Vite dev server with Express backend proxy (port 3001 locally, 5000 on Replit)
 - **Production Build**: Vite builds frontend to dist/public, esbuild bundles minimal backend to dist/
 - **Type Safety**: Shared TypeScript types between frontend and backend
 - **No Database Setup**: Zero database configuration required for deployment
 - **Simplified Deployment**: Can be deployed anywhere Node.js is supported with just `npm install` and `npm start`
+- **Cross-Platform**: Works on Windows, macOS, and Linux with automatic port configuration
 
 ## External Dependencies
 
