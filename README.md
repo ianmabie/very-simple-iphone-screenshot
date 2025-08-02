@@ -53,14 +53,14 @@ A simple, client-side web application for creating professional iPhone mockups f
 
 4. **Open your browser**
    ```
-   http://localhost:5000
+   http://localhost:3001
    ```
 
 ### Troubleshooting
 
-If you encounter port issues on macOS or Windows, try:
+If you encounter port issues, try:
 - Using a different port: `PORT=3000 npm run dev`
-- Ensuring no other applications are using port 5000
+- Ensuring no other applications are using the port
 
 ## Usage
 
