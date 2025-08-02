@@ -95,7 +95,7 @@ export default function Home() {
     }
     
     try {
-      await exportCanvas('mockup-iphone-screenshot.png');
+      await exportCanvas('mockup-iphone-screenshot.png', imageDimensions);
       toast({
         title: 'Download started',
         description: 'Your mockup is being downloaded.',
@@ -108,7 +108,7 @@ export default function Home() {
         variant: 'destructive'
       });
     }
-  }, [hasContent, exportCanvas, toast]);
+  }, [hasContent, exportCanvas, toast, imageDimensions]);
 
   return (
     <div className="font-sans bg-gray-50 min-h-screen">

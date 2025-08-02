@@ -13,6 +13,12 @@ interface PreviewCanvasProps {
 }
 
 const handleRemoveImage = (onStateChange: (state: Partial<CanvasState>) => void) => {
+  // Reset file input
+  const fileInput = document.getElementById('preview-file-input') as HTMLInputElement;
+  if (fileInput) {
+    fileInput.value = '';
+  }
+  
   onStateChange({
     image: null,
     position: { x: 0, y: 0 },

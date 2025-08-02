@@ -127,7 +127,7 @@ export function useCanvas() {
     ctx.restore();
   }, []);
 
-  const exportCanvas = useCallback(async (filename: string = 'mockup-iphone-screenshot.png') => {
+  const exportCanvas = useCallback(async (filename: string = 'mockup-iphone-screenshot.png', originalImageDimensions?: { width: number; height: number }) => {
     const canvas = canvasRef.current;
     if (!canvas) {
       console.error('Canvas ref is null:', canvasRef.current);
@@ -136,11 +136,26 @@ export function useCanvas() {
 
     return new Promise<void>((resolve, reject) => {
       try {
-        // Create a high-resolution canvas for export (4x scale for maximum quality)
-        const scale = 4;
+        // Calculate export dimensions - use original image dimensions if available, otherwise use high scale
+        let exportWidth, exportHeight;
+        if (originalImageDimensions) {
+          // Scale to match original image resolution
+          const scaleToOriginal = Math.max(
+            originalImageDimensions.width / canvas.width,
+            originalImageDimensions.height / canvas.height
+          );
+          exportWidth = canvas.width * scaleToOriginal;
+          exportHeight = canvas.height * scaleToOriginal;
+        } else {
+          // Fallback to 4x scale
+          const scale = 4;
+          exportWidth = canvas.width * scale;
+          exportHeight = canvas.height * scale;
+        }
+        
         const exportCanvas = document.createElement('canvas');
-        exportCanvas.width = canvas.width * scale;
-        exportCanvas.height = canvas.height * scale;
+        exportCanvas.width = exportWidth;
+        exportCanvas.height = exportHeight;
         const exportCtx = exportCanvas.getContext('2d');
         
         if (!exportCtx) {
@@ -151,7 +166,7 @@ export function useCanvas() {
         // Configure context for maximum quality
         exportCtx.imageSmoothingEnabled = true;
         exportCtx.imageSmoothingQuality = 'high';
-        exportCtx.scale(scale, scale);
+        exportCtx.scale(exportWidth / canvas.width, exportHeight / canvas.height);
         
         // Copy the original canvas content to the high-res canvas
         exportCtx.drawImage(canvas, 0, 0);
