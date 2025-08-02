@@ -136,7 +136,31 @@ export function useCanvas() {
 
     return new Promise<void>((resolve, reject) => {
       try {
-        canvas.toBlob((blob) => {
+        // Use getImageData and create high quality PNG manually
+        const ctx = canvas.getContext('2d');
+        if (!ctx) {
+          reject(new Error('Could not get canvas context'));
+          return;
+        }
+        
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        
+        // Create a new canvas with the same dimensions for high quality export
+        const exportCanvas = document.createElement('canvas');
+        exportCanvas.width = canvas.width;
+        exportCanvas.height = canvas.height;
+        const exportCtx = exportCanvas.getContext('2d');
+        
+        if (!exportCtx) {
+          reject(new Error('Could not create export canvas context'));
+          return;
+        }
+        
+        // Disable image smoothing for crisp pixels
+        exportCtx.imageSmoothingEnabled = false;
+        exportCtx.putImageData(imageData, 0, 0);
+        
+        exportCanvas.toBlob((blob) => {
           if (!blob) {
             reject(new Error('Failed to create blob'));
             return;

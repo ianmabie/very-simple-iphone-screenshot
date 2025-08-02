@@ -1,6 +1,6 @@
 import { useEffect, useCallback, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Upload } from 'lucide-react';
+import { Upload, X } from 'lucide-react';
 import { CanvasState } from '@/hooks/use-canvas';
 import { useToast } from '@/hooks/use-toast';
 
@@ -11,6 +11,14 @@ interface PreviewCanvasProps {
   isProcessing: boolean;
   canvasHook: ReturnType<typeof import('@/hooks/use-canvas').useCanvas>;
 }
+
+const handleRemoveImage = (onStateChange: (state: Partial<CanvasState>) => void) => {
+  onStateChange({
+    image: null,
+    position: { x: 0, y: 0 },
+    scale: 1
+  });
+};
 
 export function PreviewCanvas({ canvasState, onStateChange, onFileSelect, isProcessing, canvasHook }: PreviewCanvasProps) {
   const { canvasRef, drawMockup } = canvasHook;
@@ -128,6 +136,15 @@ export function PreviewCanvas({ canvasState, onStateChange, onFileSelect, isProc
                 className="max-w-full max-h-96 object-contain"
                 style={{ imageRendering: 'crisp-edges' }}
               />
+              <Button
+                onClick={() => handleRemoveImage(onStateChange)}
+                variant="outline"
+                size="sm"
+                className="absolute top-2 right-2 bg-white/90 hover:bg-white border border-gray-200 shadow-sm"
+              >
+                <X className="w-4 h-4 mr-2" />
+                Remove Image
+              </Button>
             </div>
           )}
         </div>

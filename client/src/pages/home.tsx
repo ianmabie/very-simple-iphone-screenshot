@@ -20,7 +20,7 @@ export default function Home() {
   const [recommendedDevice, setRecommendedDevice] = useState<string | null>(null);
   const [canvasState, setCanvasState] = useState<CanvasState>({
     image: null,
-    deviceFrame: deviceFrames[1], // iPhone 15 as default
+    deviceFrame: deviceFrames[0], // iPhone 15 Pro (Dynamic Island) as default
     position: { x: 0, y: 0 },
     scale: 1,
     backgroundGradient: 'transparent'
@@ -145,11 +145,7 @@ export default function Home() {
           <div className="mt-8 space-y-6">
             <ImageInfo 
               dimensions={imageDimensions}
-              recommendedDevice={recommendedDevice}
-            />
-            <DeviceSelector
-              selectedDevice={canvasState.deviceFrame}
-              onDeviceSelect={handleDeviceSelect}
+              recommendedDevice="iPhone 15 Pro (Dynamic Island)"
             />
           </div>
         </div>
