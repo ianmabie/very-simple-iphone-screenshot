@@ -119,7 +119,7 @@ export function useCanvas() {
         deviceFrame.dynamicIsland.y,
         deviceFrame.dynamicIsland.width,
         deviceFrame.dynamicIsland.height,
-        10
+        9
       );
       ctx.fill();
     }
