@@ -97,7 +97,7 @@ export function useCanvas() {
     }
 
     // Draw notch if device has one
-    if (deviceFrame.notch) {
+    if (deviceFrame.hasNotch && deviceFrame.notch) {
       ctx.fillStyle = deviceFrame.frameColor;
       drawRoundedRect(
         ctx,
@@ -111,7 +111,7 @@ export function useCanvas() {
     }
 
     // Draw Dynamic Island if device has one
-    if (deviceFrame.dynamicIsland) {
+    if (deviceFrame.hasDynamicIsland && deviceFrame.dynamicIsland) {
       ctx.fillStyle = '#000000';
       drawRoundedRect(
         ctx,
@@ -129,7 +129,9 @@ export function useCanvas() {
 
   const exportCanvas = useCallback(async (filename: string = 'mockup-iphone-screenshot.png') => {
     const canvas = canvasRef.current;
-    if (!canvas) throw new Error('Canvas not available');
+    if (!canvas) {
+      throw new Error('Canvas not available');
+    }
 
     return new Promise<void>((resolve, reject) => {
       try {
@@ -139,20 +141,20 @@ export function useCanvas() {
             return;
           }
           
+          // Create download link
           const url = URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = filename;
-          a.style.display = 'none';
-          document.body.appendChild(a);
-          a.click();
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = filename;
           
-          // Clean up after a short delay
-          setTimeout(() => {
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-            resolve();
-          }, 100);
+          // Force download by clicking the link
+          document.body.appendChild(link);
+          link.click();
+          
+          // Clean up
+          document.body.removeChild(link);
+          URL.revokeObjectURL(url);
+          resolve();
         }, 'image/png', 1.0);
       } catch (error) {
         reject(error);

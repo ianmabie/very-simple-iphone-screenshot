@@ -81,15 +81,33 @@ export default function Home() {
     setCanvasState(prev => ({ ...prev, ...changes }));
   }, []);
 
+  const hasContent = canvasState.image && canvasState.deviceFrame;
+
   const handleExport = useCallback(async () => {
+    if (!hasContent) {
+      toast({
+        title: 'No content to export',
+        description: 'Please upload a screenshot first.',
+        variant: 'destructive'
+      });
+      return;
+    }
+    
     try {
       await exportCanvas('mockup-iphone-screenshot.png');
+      toast({
+        title: 'Download started',
+        description: 'Your mockup is being downloaded.',
+      });
     } catch (error) {
-      throw error;
+      console.error('Export failed:', error);
+      toast({
+        title: 'Download failed',
+        description: 'Please try again.',
+        variant: 'destructive'
+      });
     }
-  }, [exportCanvas]);
-
-  const hasContent = canvasState.image && canvasState.deviceFrame;
+  }, [hasContent, exportCanvas, toast]);
 
   return (
     <div className="font-sans bg-gray-50 min-h-screen">
@@ -122,20 +140,20 @@ export default function Home() {
             isProcessing={isProcessing}
           />
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
-            <DeviceSelector
-              selectedDevice={canvasState.deviceFrame}
-              onDeviceSelect={handleDeviceSelect}
-            />
+          <div className="mt-8 space-y-6">
             <ImageInfo 
               dimensions={imageDimensions}
               recommendedDevice={recommendedDevice}
+            />
+            <DeviceSelector
+              selectedDevice={canvasState.deviceFrame}
+              onDeviceSelect={handleDeviceSelect}
             />
           </div>
         </div>
 
         <ExportPanel
-          hasContent={!!hasContent}
+          hasContent={hasContent}
           onExport={handleExport}
         />
       </main>
